@@ -217,6 +217,7 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
   }
 
   if (isMacOS()) {
+    await exec.exec("brew trust aws/tap azure/bicep")
     await exec.exec("brew install readline ncurses")
   } else {
     await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
