@@ -250,7 +250,7 @@ async function install(luaInstallPath, luaVersion) {
   return await install_plain_lua(luaInstallPath, luaVersion)
 }
 
-const makeCacheKey = (luaVersion, compileFlags) => `lua:${luaVersion}:${process.platform}:${process.arch}:${compileFlags}`
+const makeCacheKey = (luaVersion, compileFlags) => `lua-${luaVersion}-${process.platform}-${process.arch}${compileFlags ? `-${compileFlags}` : ''}`
 
 async function main() {
   let luaVersion = core.getInput('luaVersion', { required: true })
