@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Build and install Lua",
   "main": "main.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "@actions/cache": "^6.1.0",
-    "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1",
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
     "@actions/io": "^3.0.2",
     "@actions/tool-cache": "^4.0.0",
     "esbuild": "^0.28.1"

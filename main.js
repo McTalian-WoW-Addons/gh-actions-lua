@@ -1,15 +1,13 @@
-
-const core = require("@actions/core")
-const exec = require("@actions/exec")
-const io = require("@actions/io")
-const tc = require("@actions/tool-cache")
-const ch = require("@actions/cache")
-const fsp = require("fs").promises
+import * as core from "@actions/core"
+import * as exec from "@actions/exec"
+import * as io from "@actions/io"
+import * as tc from "@actions/tool-cache"
+import * as ch from "@actions/cache"
+import { promises as fsp } from "node:fs"
+import path from "node:path"
 
 const notice = (msg) => core.notice(`gh-actions-lua: ${msg}`)
 const warning = (msg) => core.warning(`gh-actions-lua: ${msg}`)
-
-const path = require("path")
 
 const BUILD_PREFIX = ".lua-build" // this is a temporary folder where lua will be built
 const LUA_PREFIX = ".lua" // this is where Lua will be installed
@@ -18,7 +16,8 @@ const VERSION_ALIASES = {
   "5.1": "5.1.5",
   "5.2": "5.2.4",
   "5.3": "5.3.6",
-  "5.4": "5.4.7",
+  "5.4": "5.4.8",
+  "5.5": "5.5.0",
   "luajit": "luajit-2.1",
 }
 
@@ -299,4 +298,3 @@ async function main() {
 main().catch(err => {
   core.setFailed(`Failed to install Lua: ${err}`);
 })
-
