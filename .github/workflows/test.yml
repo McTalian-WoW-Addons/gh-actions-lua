@@ -73,3 +73,11 @@ jobs:
 
     - name: Test Lua
       run: lua -e "print('hi from lua')"
+
+  pr-required-check:
+    if: ${{ github.event_name == 'pull_request' }}
+    needs: [test, test-cache]
+    runs-on: ubuntu-latest
+    steps:
+    - name: PR check
+      run: echo "This check is required for PRs to be merged, but it doesn't do anything. If the tests above fail, this won't run and the PR can't be merged."
