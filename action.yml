@@ -21,4 +21,4 @@ inputs:
 
 runs:
   using: 'node24'
-  main: 'app.js'
+  main: 'app.cjs'
