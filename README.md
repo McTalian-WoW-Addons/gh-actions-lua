@@ -1,8 +1,9 @@
-# Github Action for Lua and LuaJIT
+# `McTalian-WoW-Addons/gh-actions-lua`
 
-### `leafo/gh-actions-lua`
+> **Fork notice**: This is a fork of [`leafo/gh-actions-lua`](https://github.com/leafo/gh-actions-lua),
+> maintained separately with fixes and updates. The original is by leafo.
 
-[![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
+[![Actions Status](https://github.com/McTalian-WoW-Addons/gh-actions-lua/workflows/test/badge.svg)](https://github.com/McTalian-WoW-Addons/gh-actions-lua/actions)
 
 **Note**: You must use version 8 or greater as GitHub has
 deprecated older versions of the actions core libraries.
@@ -13,22 +14,21 @@ directly in workflows.
 
 Other Lua GitHub actions:
 
-* [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
-  * inputs: `luarocksVersion`
-
+- [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
+  - inputs: `luarocksVersion`
 
 ## Usage
 
 Install Lua: (Will typically default to the latest release, 5.4.4 as of this readme)
 
 ```yaml
-- uses: leafo/gh-actions-lua@v11
+- uses: McTalian-WoW-Addons/gh-actions-lua@v1
 ```
 
 Install specific version of Lua:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v11
+- uses: McTalian-WoW-Addons/gh-actions-lua@v1
   with:
     luaVersion: "5.1.5"
 ```
@@ -36,7 +36,7 @@ Install specific version of Lua:
 Install specific version of LuaJIT:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v11
+- uses: McTalian-WoW-Addons/gh-actions-lua@v1
   with:
     luaVersion: "luajit-2.1.0-beta3"
 ```
@@ -47,7 +47,7 @@ include this line on non-Windows platforms, as the action will do nothing in tho
 
 ```yaml
 - uses: step-security/msvc-dev-cmd@v1
-- uses: leafo/gh-actions-lua@v11
+- uses: McTalian-WoW-Addons/gh-actions-lua@v1
 ```
 
 ## Inputs
@@ -61,22 +61,22 @@ where to download the source from.
 
 Examples of versions:
 
-* `"5.1.5"`
-* `"5.2.4"`
-* `"5.3.5"`
-* `"5.4.1"`
-* `"luajit-2.0"`
-* `"luajit-2.1"`
-* `"luajit-master"`
-* `"luajit-openresty"`
+- `"5.1.5"`
+- `"5.2.4"`
+- `"5.3.5"`
+- `"5.4.1"`
+- `"luajit-2.0"`
+- `"luajit-2.1"`
+- `"luajit-master"`
+- `"luajit-openresty"`
 
 The version specifies where the source is downloaded from:
 
-* `luajit-openresty` — will always pull master from https://github.com/openresty/luajit2
-* Anything else starting with `luajit-` — pulls a master or version branch from https://github.com/luajit/luajit
-* Anything else — from https://www.lua.org/ftp/
+- `luajit-openresty` — will always pull master from [openresty's luajit2](https://github.com/openresty/luajit2)
+- Anything else starting with `luajit-` — pulls a master or version branch of [LuaJIT repo](https://github.com/luajit/luajit)
+- Anything else — from [Lua FTP](https://www.lua.org/ftp/)
 
-**Version aliases**
+#### Version aliases
 
 You can use shorthand `5.1`, `5.2`, `5.3`, `5.4`, `luajit` version aliases to point to the
 latest (or recent) version of Lua for that version.
@@ -90,7 +90,7 @@ Additional flags to pass to `make` when building Lua.
 Example value:
 
 ```yaml
-- uses: leafo/gh-actions-lua@master
+- uses: McTalian-WoW-Addons/gh-actions-lua@v1
   with:
     luaVersion: 5.3
     luaCompileFlags: LUA_CFLAGS="-DLUA_INT_TYPE=LUA_INT_INT"
@@ -115,29 +115,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@v7
 
-    - uses: leafo/gh-actions-lua@v11
-      with:
-        luaVersion: "5.1.5"
+      - uses: McTalian-WoW-Addons/gh-actions-lua@v1
+        with:
+          luaVersion: "5.1.5"
 
-    - uses: leafo/gh-actions-luarocks@v4
+      - uses: leafo/gh-actions-luarocks@v4
 
-    - name: build
-      run: |
-        luarocks install busted
-        luarocks make
+      - name: build
+        run: |
+          luarocks install busted
+          luarocks make
 
-    - name: test
-      run: |
-        busted -o utfTerminal
+      - name: test
+        run: |
+          busted -o utfTerminal
 ```
 
 This example:
 
-* Uses Lua 5.1.5 — You can use another version by chaning the `luaVersion` varible. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
-* Uses a `.rockspec` file the root directory of your repository to install dependencies and test packaging the module via `luarocks make`
-
+- Uses Lua 5.1.5 — You can use another version by chaning the `luaVersion` varible. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
+- Uses a `.rockspec` file the root directory of your repository to install dependencies and test packaging the module via `luarocks make`
 
 View the documentation for the individual actions (linked above) to learn more about how they work.
 
@@ -153,10 +152,10 @@ jobs:
         luaVersion: ["5.1.5", "5.2.4", "luajit-2.1.0-beta3"]
 
     steps:
-    - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@v11
-      with:
-        luaVersion: ${{ matrix.luaVersion }}
+      - uses: actions/checkout@v7
+      - uses: McTalian-WoW-Addons/gh-actions-lua@v1
+        with:
+          luaVersion: ${{ matrix.luaVersion }}
 
     # ...
 ```
