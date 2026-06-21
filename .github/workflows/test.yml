@@ -102,9 +102,27 @@ jobs:
       - name: Test Lua
         run: lua -e "print('hi from lua')"
 
+  trunk-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Trunk Cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          key: trunk-cache-${{ hashFiles('**/trunk.yaml') }}
+          path: ~/.cache/trunk
+
+      - name: Trunk Code Quality
+        uses: trunk-io/trunk-action@04ba50e7658c81db7356da96657e6e77f220bfa3 # v1.3.1
+
   pr-required-check:
     if: ${{ github.event_name == 'pull_request' }}
-    needs: [test, test-cache]
+    needs: [test, test-cache, trunk-check]
     runs-on: ubuntu-latest
     steps:
       - name: PR check

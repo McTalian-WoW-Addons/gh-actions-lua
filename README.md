@@ -1,12 +1,18 @@
 # `McTalian-WoW-Addons/gh-actions-lua`
 
 > **Fork notice**: This is a fork of [`leafo/gh-actions-lua`](https://github.com/leafo/gh-actions-lua),
-> maintained separately with fixes and updates. The original is by leafo.
+> maintained separately with fixes and updates. The original is by leafo. I liked where the
+> [lewis6991 fork](https://github.com/lewis6991/gh-actions-lua) went with bundling, so I used that as
+> my starting point. Kudos to both of them for their work on this action.
+>
+> Main differences from the base are:
+>
+> - releases no longer have lua binaries in the release assets
+> - general code cleanup - linting, bundling with esbuild instead of committing node_modules, etc.
+> - leverage pinact to reduce the risk of supply chain attacks from GitHub actions
+> - add dependabot config to keep dependencies up to date
 
 [![Actions Status](https://github.com/McTalian-WoW-Addons/gh-actions-lua/workflows/test/badge.svg)](https://github.com/McTalian-WoW-Addons/gh-actions-lua/actions)
-
-**Note**: You must use version 8 or greater as GitHub has
-deprecated older versions of the actions core libraries.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
 Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called

@@ -1,47 +1,40 @@
 name: publish
 
 on:
-  push:
-    tags:
-      - "*"
+  release:
+    types: [published]
 
 permissions: {}
 
 jobs:
-  build:
+  move-major-tag:
+    runs-on: ubuntu-latest
     permissions:
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        luaVersion:
-          [
-            5.1.5,
-            5.2.4,
-            5.3.5,
-            5.4.1,
-            luajit-2.0.5,
-            luajit-2.1.0-beta3,
-            luajit-openresty,
-            5.1,
-          ]
-
-    runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: ./
+      - name: Create or Update Major Version Tag
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          luaVersion: ${{ matrix.luaVersion }}
+          script: |
+            const fullVersion = process.env.GITHUB_REF_NAME;
+            const majorVersion = fullVersion.split('.')[0];
+            const tagName = fullVersion.includes('-') ? `${majorVersion}-${fullVersion.split('-')[1].split('.')[0]}` : majorVersion;
 
-      - name: bundle binaries
-        run: tar czf '${{matrix.luaVersion}}.tar.gz' .lua
-
-      - name: upload to release
-        uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # 2.11.5
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ matrix.luaVersion }}.tar.gz
-          asset_name: ${{ matrix.luaVersion }}.tar.gz
-          tag: ${{ github.ref }}
-          overwrite: true
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tagName}`,
+              sha: context.sha
+            }).catch(async (error) => {
+              if (error.status === 422) {
+                await github.rest.git.updateRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `tags/${tagName}`,
+                  sha: context.sha,
+                  force: true
+                });
+              } else {
+                throw error;
+              }
+            });
