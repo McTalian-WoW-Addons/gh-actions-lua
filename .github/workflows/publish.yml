@@ -11,14 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      TAG_NAME: ${{ github.event.release.tag_name }}
     steps:
       - name: Create or Update Major Version Tag
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            const fullVersion = process.env.GITHUB_REF_NAME;
+            const fullVersion = process.env.TAG_NAME;
             const majorVersion = fullVersion.split('.')[0];
             const tagName = fullVersion.includes('-') ? `${majorVersion}-${fullVersion.split('-')[1].split('.')[0]}` : majorVersion;
+
+            console.log(`Full version: ${fullVersion}`);
+            console.log(`Major version: ${majorVersion}`);
+            console.log(`Tag name to create/update: ${tagName}`);
 
             await github.rest.git.createRef({
               owner: context.repo.owner,
@@ -26,6 +32,7 @@ jobs:
               ref: `refs/tags/${tagName}`,
               sha: context.sha
             }).catch(async (error) => {
+              console.warn(error);
               if (error.status === 422) {
                 await github.rest.git.updateRef({
                   owner: context.repo.owner,
