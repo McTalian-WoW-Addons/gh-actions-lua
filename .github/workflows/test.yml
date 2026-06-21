@@ -117,7 +117,7 @@ jobs:
 
       - name: Check bundle is up to date
         run: |
-          if ! git diff --exit-code app.js; then
+          if ! git diff --quiet app.js; then
             echo "❌ app.js is out of date. Run 'make build' and commit the updated app.js."
             exit 1
           fi
